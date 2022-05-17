@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './components/app/app';
 
 const settings = {
-  count: 5,
+  count: 4,
 };
 
 ReactDOM.render(

@@ -5,7 +5,9 @@ interface MainScreenProps {
   count: number;
 }
 
-function MainScreen ({count}: MainScreenProps): JSX.Element {
+function MainScreen (props: MainScreenProps): JSX.Element {
+  console.log(props);
+
   return (
     <div className="page page--gray page--main">
       <header className="header">
@@ -95,7 +97,7 @@ function MainScreen ({count}: MainScreenProps): JSX.Element {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                {new Array(count).fill('').map((item, i) => <Card temp='q' key={Date.now().toString()} />)}
+                {new Array(props.count).fill('').map((item, i) => <Card temp='q' key={Math.random()} />)}
               </div>
             </section>
             <div className="cities__right-section">
