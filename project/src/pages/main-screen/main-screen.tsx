@@ -1,42 +1,18 @@
 import React from 'react';
-import Card from '../card/card';
+import type { TOffers } from '../../types/offers';
+import OfferList from '../../components/offer-list/offer-list';
+import Header from '../../components/header/header';
 
 interface MainScreenProps {
-  count: number;
+  offers: TOffers;
 }
 
 function MainScreen (props: MainScreenProps): JSX.Element {
-  console.log(props);
+  const {offers} = props;
 
   return (
     <div className="page page--gray page--main">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <a href="#todo" className="header__logo-link header__logo-link--active">
-                <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
-              </a>
-            </div>
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <a href="#todo" className="header__nav-link header__nav-link--profile" >
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                  </a>
-                </li>
-                <li className="header__nav-item">
-                  <a href="#todo" className="header__nav-link" >
-                    <span className="header__signout">Sign out</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header authorized />
 
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
@@ -97,7 +73,7 @@ function MainScreen (props: MainScreenProps): JSX.Element {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                {new Array(props.count).fill('').map((item, i) => <Card temp='q' key={Math.random()} />)}
+                <OfferList offers={offers} />
               </div>
             </section>
             <div className="cities__right-section">

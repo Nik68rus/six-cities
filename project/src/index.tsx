@@ -1,13 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/app/app';
-
-const settings = {
-  count: 4,
-};
+import { offers } from './mocks/offers';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App count={settings.count} />
+    <App offers={offers} />
   </React.StrictMode>,
   document.getElementById('root'));
