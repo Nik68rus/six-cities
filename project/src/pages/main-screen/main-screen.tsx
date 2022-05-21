@@ -1,7 +1,9 @@
-import React from 'react';
-import type { TOffers } from '../../types/offers';
+import React, {useState} from 'react';
+import type { TOffer, TOffers } from '../../types/offers';
 import OfferList from '../../components/offer-list/offer-list';
 import Header from '../../components/header/header';
+import Map from '../../components/map/map';
+import { TPoint } from '../../types';
 
 interface MainScreenProps {
   offers: TOffers;
@@ -9,6 +11,18 @@ interface MainScreenProps {
 
 function MainScreen (props: MainScreenProps): JSX.Element {
   const {offers} = props;
+
+  const [activeOfferId, setActiveOfferId] = useState<TOffer['id'] | undefined>(undefined);
+
+  const offerHoverHandler = (id: TOffer['id'] | undefined) => {
+    setActiveOfferId(id);
+  };
+
+  const points: TPoint[] = offers.map((offer) => ({
+    id: offer.id,
+    lat: offer.location[0],
+    lng: offer.location[1],
+  }));
 
   return (
     <div className="page page--gray page--main">
@@ -73,11 +87,13 @@ function MainScreen (props: MainScreenProps): JSX.Element {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                <OfferList offers={offers} />
+                <OfferList offers={offers} onOfferHover={offerHoverHandler} />
               </div>
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <section className="cities__map map">
+                <Map city={offers[0].city} points={points} activePointId={activeOfferId}/>
+              </section>
             </div>
           </div>
         </div>

@@ -18,6 +18,7 @@ export type TOffer = {
   host: TUser;
   images: string[];
   capacity: number;
+  location: [number, number],
 };
 
 export type TOffers = TOffer[];

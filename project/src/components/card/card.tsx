@@ -4,17 +4,24 @@ import cx from 'classnames';
 
 interface CardProps {
   offer: TOffer;
-  onActiveCardChange?: React.Dispatch<React.SetStateAction<TOffer | null>>;
+  onActiveCardChange?: (id: TOffer['id'] | undefined)=>void;
   type: 'cities' | 'favorites';
 }
 
 function Card(props: CardProps) {
   const { offer, onActiveCardChange, type } = props;
 
-  const setActiveCard = (card: TOffer | null) => {
-    if (onActiveCardChange !== undefined) {
-      onActiveCardChange(card);
+  const setActiveCard = (card: TOffer | undefined) => {
+    if (onActiveCardChange === undefined) {
+      return;
     }
+
+    if (card === undefined) {
+      onActiveCardChange(card);
+      return;
+    }
+
+    onActiveCardChange(card.id);
   };
 
   return (
@@ -27,7 +34,7 @@ function Card(props: CardProps) {
         'place-card',
       )}
       onMouseEnter={setActiveCard.bind(null, offer)}
-      onMouseLeave={setActiveCard.bind(null, null)}
+      onMouseLeave={setActiveCard.bind(null, undefined)}
     >
       {offer.isPremium && (
         <div className="place-card__mark">
