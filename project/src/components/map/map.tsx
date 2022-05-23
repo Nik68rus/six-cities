@@ -9,7 +9,7 @@ import 'leaflet/dist/leaflet.css';
 interface MapProps {
   city: TCity;
   points: TPoint[];
-  activePointId: TOffer['id'] | undefined;
+  activePointId?: TOffer['id'] | undefined;
 }
 
 const defaultCustomIcon = new Icon({
@@ -28,6 +28,9 @@ function Map(props: MapProps): JSX.Element {
   const {city, points, activePointId} = props;
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
+
+  console.log(points);
+
 
   useEffect(() => {
     if (map) {

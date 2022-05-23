@@ -4,6 +4,7 @@ import OfferList from '../../components/offer-list/offer-list';
 import Header from '../../components/header/header';
 import Map from '../../components/map/map';
 import { TPoint } from '../../types';
+import { convertOfferToPoint } from '../../utils';
 
 interface MainScreenProps {
   offers: TOffers;
@@ -18,11 +19,7 @@ function MainScreen (props: MainScreenProps): JSX.Element {
     setActiveOfferId(id);
   };
 
-  const points: TPoint[] = offers.map((offer) => ({
-    id: offer.id,
-    lat: offer.location[0],
-    lng: offer.location[1],
-  }));
+  const points: TPoint[] = offers.map(convertOfferToPoint);
 
   return (
     <div className="page page--gray page--main">
@@ -87,7 +84,7 @@ function MainScreen (props: MainScreenProps): JSX.Element {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                <OfferList offers={offers} onOfferHover={offerHoverHandler} />
+                <OfferList offers={offers} onOfferHover={offerHoverHandler} type='cities'/>
               </div>
             </section>
             <div className="cities__right-section">

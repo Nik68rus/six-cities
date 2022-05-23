@@ -1,11 +1,12 @@
 import type { TOffer } from '../../types/offers';
 import { Link } from 'react-router-dom';
 import cx from 'classnames';
+import { TCardType } from '../../types';
 
 interface CardProps {
   offer: TOffer;
   onActiveCardChange?: (id: TOffer['id'] | undefined)=>void;
-  type: 'cities' | 'favorites';
+  type: TCardType;
 }
 
 function Card(props: CardProps) {
@@ -29,6 +30,7 @@ function Card(props: CardProps) {
       className={cx(
         {
           'cities__place-card': type === 'cities',
+          'near-places__card': type === 'near-places',
           'favorites__card': type === 'favorites',
         },
         'place-card',
@@ -46,8 +48,8 @@ function Card(props: CardProps) {
           <img
             className="place-card__image"
             src={offer.cover}
-            width={type === 'cities' ? '260' : '150'}
-            height={type === 'cities' ? '200' : '110'}
+            width={(type === 'cities' || type === 'near-places') ? '260' : '150'}
+            height={(type === 'cities' || type === 'near-places') ? '200' : '110'}
             alt="Place"
           />
         </Link>
