@@ -1,18 +1,18 @@
-import React, {useState} from 'react';
-import type { TOffer, TOffers } from '../../types/offers';
+import React, {useEffect, useState} from 'react';
+import type { TOffer } from '../../types/offers';
 import OfferList from '../../components/offer-list/offer-list';
 import Header from '../../components/header/header';
 import Map from '../../components/map/map';
 import { TPoint } from '../../types';
-import { convertOfferToPoint } from '../../utils';
+import { convertOfferToPoint, filterOffers } from '../../utils';
+import CityList from '../../components/city-list/city-list';
+import { cities } from '../../utils/const';
+import { useDispatch, useSelector } from '../../hooks';
+import { changeCity, setCityOffers } from '../../store/action';
+import { offers } from '../../mocks/offers';
 
-interface MainScreenProps {
-  offers: TOffers;
-}
-
-function MainScreen (props: MainScreenProps): JSX.Element {
-  const {offers} = props;
-
+function MainScreen (): JSX.Element {
+  const {offers: cityOffers, city} = useSelector((state) => state);
   const [activeOfferId, setActiveOfferId] = useState<TOffer['id'] | undefined>(undefined);
 
   const offerHoverHandler = (id: TOffer['id'] | undefined) => {
@@ -20,6 +20,12 @@ function MainScreen (props: MainScreenProps): JSX.Element {
   };
 
   const points: TPoint[] = offers.map(convertOfferToPoint);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(changeCity(cities[0]));
+    dispatch(setCityOffers(filterOffers(cities[0], offers)));
+  }, [dispatch]);
 
   return (
     <div className="page page--gray page--main">
@@ -28,46 +34,13 @@ function MainScreen (props: MainScreenProps): JSX.Element {
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
-          <section className="locations container">
-            <ul className="locations__list tabs__list">
-              <li className="locations__item">
-                <a href="#todo" className="locations__item-link tabs__item" >
-                  <span>Paris</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a href="#todo" className="locations__item-link tabs__item" >
-                  <span>Cologne</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a href="#todo" className="locations__item-link tabs__item" >
-                  <span>Brussels</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a href="#todo" className="locations__item-link tabs__item tabs__item--active">
-                  <span>Amsterdam</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a href="#todo" className="locations__item-link tabs__item" >
-                  <span>Hamburg</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a href="#todo" className="locations__item-link tabs__item" >
-                  <span>Dusseldorf</span>
-                </a>
-              </li>
-            </ul>
-          </section>
+          <CityList items={cities} />
         </div>
         <div className="cities">
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">312 places to stay in Amsterdam</b>
+              <b className="places__found">{cityOffers.length} place{cityOffers.length > 1 && 's'} to stay in {city.title}</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -84,12 +57,12 @@ function MainScreen (props: MainScreenProps): JSX.Element {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                <OfferList offers={offers} onOfferHover={offerHoverHandler} type='cities'/>
+                <OfferList offers={cityOffers} onOfferHover={offerHoverHandler} type='cities'/>
               </div>
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
-                <Map city={offers[0].city} points={points} activePointId={activeOfferId}/>
+                <Map city={city} points={points} activePointId={activeOfferId}/>
               </section>
             </div>
           </div>

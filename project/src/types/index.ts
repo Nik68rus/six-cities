@@ -29,3 +29,8 @@ export type TReview = {
   rating: number;
   user: TUser;
 }
+
+export type TCityState = {
+  city: TCity;
+  offers: ReadonlyArray<TOffer> | [];
+}

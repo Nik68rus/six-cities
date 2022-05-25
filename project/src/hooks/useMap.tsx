@@ -25,6 +25,9 @@ function useMap(
 
       setMap(mapInstance);
     }
+    if (mapRef.current !== null && map !== null) {
+      map.setView({lat: city.lat, lng: city.lng});
+    }
   }, [mapRef, city, map]);
 
   return map;

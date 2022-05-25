@@ -1,9 +1,9 @@
 import { TCardType } from '../../types';
-import type { TOffer, TOffers } from '../../types/offers';
+import type { TOffer } from '../../types/offers';
 import Card from '../card/card';
 
 interface OfferListProps {
-  offers: TOffers;
+  offers: ReadonlyArray<TOffer>;
   onOfferHover: (id: TOffer['id'] | undefined)=>void;
   type: TCardType;
 }
