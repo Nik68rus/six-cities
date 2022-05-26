@@ -15,14 +15,12 @@ export enum Pins {
   Active = '/img/pin-active.svg'
 }
 
-// export const cities: TCityName[] = [
-//   'Paris',
-//   'Cologne',
-//   'Brussels',
-//   'Amsterdam',
-//   'Hamburg',
-//   'Dusseldorf',
-// ];
+export enum Sorting {
+  Popular = 'Popular',
+  PriceInc = 'Price: low to high',
+  PriceDec = 'Price: high to low',
+  Rate = 'Top rated first'
+}
 
 export const cities: TCity[] = [
   {
