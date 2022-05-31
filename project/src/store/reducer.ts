@@ -1,8 +1,8 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { TCityState } from './../types/index';
-import { changeCity, setCityOffers } from './action';
+import { TState } from './../types/index';
+import { changeCity, loadOffers } from './action';
 
-const initialState: TCityState = {
+const initialState: TState = {
   city: {
     title: 'Paris',
     lat: 48.85661,
@@ -10,16 +10,18 @@ const initialState: TCityState = {
     zoom: 12,
   },
   offers: [],
+  isDataLoaded: false,
 };
 
-const cityReducer = createReducer(initialState, (builder) => {
+const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(changeCity, (state, action) => {
       state.city = action.payload;
     })
-    .addCase(setCityOffers, (state, action) => {
+    .addCase(loadOffers, (state, action) => {
       state.offers = action.payload;
+      state.isDataLoaded = true;
     });
 });
 
-export {cityReducer};
+export {reducer};

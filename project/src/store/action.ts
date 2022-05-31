@@ -4,4 +4,4 @@ import type { TCity } from './../types/index';
 import { ActionType } from '../types/action';
 
 export const changeCity = createAction<TCity>(ActionType.ChangeCity);
-export const setCityOffers = createAction<TOffers>(ActionType.SetOffers);
+export const loadOffers = createAction<TOffers>(ActionType.LoadOffers);

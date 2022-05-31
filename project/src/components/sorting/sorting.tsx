@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import cx from 'classnames';
-import { Sorting as SortType } from '../../utils/const';
-// import { SortDescription } from '../../utils/const';
+import { SortType } from '../../utils/const';
 
 interface SortingProps {
   current: SortType;

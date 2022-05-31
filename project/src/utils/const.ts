@@ -15,7 +15,7 @@ export enum Pins {
   Active = '/img/pin-active.svg'
 }
 
-export enum Sorting {
+export enum SortType {
   Popular = 'Popular',
   PriceInc = 'Price: low to high',
   PriceDec = 'Price: high to low',

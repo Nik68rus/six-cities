@@ -16,12 +16,6 @@ export type TCity = {
   title: TCityName;
 }
 
-export type TPoint = {
-  id: TOffer['id'];
-  lat: number;
-  lng: number;
-}
-
 export type TReview = {
   comment: string;
   date: Date;
@@ -30,7 +24,26 @@ export type TReview = {
   user: TUser;
 }
 
-export type TCityState = {
+export type TState = {
   city: TCity;
   offers: ReadonlyArray<TOffer> | [];
+  isDataLoaded: boolean;
+}
+
+export type TLocation = {
+  latitude: number;
+  longitude: number;
+  zoom: number;
+}
+
+export type TServerCity = {
+  name: TCityName;
+  location: TLocation;
+}
+
+export type TServerUser = {
+  id: number;
+  name: string;
+  isPro: boolean;
+  avatarUrl: string;
 }

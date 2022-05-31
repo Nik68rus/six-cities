@@ -3,10 +3,7 @@ import cx from 'classnames';
 import { useDispatch, useSelector } from '../../hooks';
 import { TCity } from '../../types';
 import { Paths } from '../../utils/paths';
-import { changeCity, setCityOffers } from '../../store/action';
-import { filterOffers } from '../../utils';
-import { offers } from '../../mocks/offers';
-
+import { changeCity } from '../../store/action';
 interface CityListProps {
   items: TCity[];
 }
@@ -14,11 +11,10 @@ interface CityListProps {
 function CityList(props: CityListProps): JSX.Element {
   const { items } = props;
   const dispatch = useDispatch();
-  const currentCity = useSelector((state) => state.city);
+  const {city: currentCity} = useSelector((state) => state);
 
   const cityClickHandler = (city: TCity) => {
     dispatch(changeCity(city));
-    dispatch(setCityOffers(filterOffers(city, offers)));
   };
 
   return (

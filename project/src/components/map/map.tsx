@@ -1,14 +1,14 @@
 import {useRef, useEffect} from 'react';
 import {Icon, Marker} from 'leaflet';
 import useMap from '../../hooks/useMap';
-import { TCity, TPoint } from '../../types';
+import { TCity } from '../../types';
 import { TOffer } from '../../types/offers';
 import { Pins } from '../../utils/const';
 import 'leaflet/dist/leaflet.css';
 
 interface MapProps {
   city: TCity;
-  points: TPoint[];
+  offers: [] | readonly TOffer[];
   activePointId?: TOffer['id'] | undefined;
 }
 
@@ -25,16 +25,16 @@ const currentCustomIcon = new Icon({
 });
 
 function Map(props: MapProps): JSX.Element {
-  const {city, points, activePointId} = props;
+  const {city, offers, activePointId} = props;
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
 
   useEffect(() => {
     if (map) {
-      points.forEach((point) => {
+      offers.forEach((point) => {
         const marker = new Marker({
-          lat: point.lat,
-          lng: point.lng,
+          lat: point.location[0],
+          lng: point.location[1],
         });
 
         marker.setIcon(point.id === activePointId ? currentCustomIcon : defaultCustomIcon).addTo(map);
@@ -42,7 +42,7 @@ function Map(props: MapProps): JSX.Element {
       });
     }
 
-  }, [map, points, activePointId]);
+  }, [map, offers, activePointId]);
 
   return (
     <div style={{height: '100%'}} ref={mapRef}></div>

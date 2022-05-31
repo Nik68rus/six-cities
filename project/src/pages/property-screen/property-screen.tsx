@@ -7,7 +7,6 @@ import ReviewList from '../../components/review-list/review-list';
 import { TOffer, TOffers } from '../../types/offers';
 import {reviews} from '../../mocks/reviews';
 import Map from '../../components/map/map';
-import { convertOfferToPoint } from '../../utils';
 import OfferList from '../../components/offer-list/offer-list';
 
 interface PropertyScreenProps {
@@ -157,7 +156,7 @@ function PropertyScreen(props: PropertyScreenProps): JSX.Element {
               </div>
             </div>
             <section className="property__map map">
-              <Map city={offer.city} points={neighbourOffers.map(convertOfferToPoint)} activePointId={activeId}/>
+              <Map city={offer.city} offers={neighbourOffers} activePointId={activeId}/>
             </section>
           </section>
         )}

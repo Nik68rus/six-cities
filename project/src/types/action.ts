@@ -1,19 +1,16 @@
-import { TOffer } from './offers';
-import { TCity } from './index';
+// import { setCityOffers } from './../store/action';
+// import { TCity } from './index';
 
 export enum ActionType {
   ChangeCity = 'city/change',
-  SetOffers = 'city/setOffers',
+  LoadOffers = 'data/loadOffers'
 }
 
-export type TChangeCityAction = {
-  type: ActionType.ChangeCity;
-  payload: TCity;
-}
+// export type TChangeCityAction = {
+//   type: ActionType.ChangeCity;
+//   payload: TCity;
+// }
 
-export type TSetCityOffersAction = {
-  type: ActionType.SetOffers;
-  payload: ReadonlyArray<TOffer>
-}
+// export type TSetCityOffersAction = ReturnType<typeof setCityOffers>;
 
-export type TActions = TChangeCityAction | TSetCityOffersAction;
+// export type TActions = TChangeCityAction | TSetCityOffersAction;
