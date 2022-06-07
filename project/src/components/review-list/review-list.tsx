@@ -1,8 +1,9 @@
-import { TReview } from '../../types';
+import React from 'react';
+import { TComment } from '../../types';
 import ReviewItem from '../review-item/review-item';
 
 interface ReviewListProps {
-  reviews: TReview[];
+  reviews: TComment[];
 }
 
 function ReviewList(props: ReviewListProps): JSX.Element {
@@ -16,4 +17,4 @@ function ReviewList(props: ReviewListProps): JSX.Element {
   );
 }
 
-export default ReviewList;
+export default React.memo(ReviewList);

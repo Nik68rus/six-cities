@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import cx from 'classnames';
 import { SortType } from '../../utils/const';
+import { useDispatch, useSelector } from '../../hooks';
+import { sortingSelector } from '../../store/app/selectors';
+import { changeSorting } from '../../store/app/app';
 
-interface SortingProps {
-  current: SortType;
-  onOffersSort: React.Dispatch<React.SetStateAction<SortType>>;
-}
-
-function Sorting(props: SortingProps): JSX.Element {
-  const { current, onOffersSort } = props;
+function Sorting(): JSX.Element {
+  const dispatch = useDispatch();
+  const current = useSelector(sortingSelector);
   const [isOpen, setIsOpen] = useState(false);
 
   const documentClickHandler = (evt: MouseEvent) => {
@@ -31,7 +30,7 @@ function Sorting(props: SortingProps): JSX.Element {
 
   const sortingChoiceHandler = (type: SortType) => {
     sortingClickHandler();
-    onOffersSort(type);
+    dispatch(changeSorting(type));
   };
 
   return (
@@ -65,4 +64,4 @@ function Sorting(props: SortingProps): JSX.Element {
   );
 }
 
-export default Sorting;
+export default React.memo(Sorting);

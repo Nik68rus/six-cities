@@ -1,18 +1,14 @@
-import { TOffers } from '../../types/offers';
 import Card from '../../components/card/card';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
+import { useSelector } from '../../hooks';
 
-interface FavoriteScreenProps {
-  list: TOffers;
-}
-
-function FavoritesScreen(props: FavoriteScreenProps): JSX.Element {
-  const { list } = props;
+function FavoritesScreen(): JSX.Element {
+  const list = useSelector((state) => state.DATA.offers);
 
   return (
     <div className="page">
-      <Header authorized />
+      <Header />
 
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">

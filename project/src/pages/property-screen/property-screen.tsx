@@ -1,32 +1,69 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import cx from 'classnames';
 import { useParams } from 'react-router-dom';
 import Header from '../../components/header/header';
 import ReviewForm from '../../components/review-form/review-form';
 import ReviewList from '../../components/review-list/review-list';
-import { TOffer, TOffers } from '../../types/offers';
-import {reviews} from '../../mocks/reviews';
 import Map from '../../components/map/map';
 import OfferList from '../../components/offer-list/offer-list';
+import { useDispatch, useSelector } from '../../hooks';
+import {
+  fetchComments,
+  fetchDetails,
+  fetchNeighbours
+} from '../../store/api-actions';
+import { AuthorizationStatus, NameSpace } from '../../utils/const';
+import {
+  setActiveOffer,
+  setComments,
+  setNeighbourOffers
+} from '../../store/data/data';
+import NotFoundScreen from '../not-found-screen/not-found-screen';
+import Spinner from '../../components/spinner/spinner';
+import { activeOfferIdSelector } from '../../store/app/selectors';
+import { authStatusSelector } from '../../store/user/selectors';
 
-interface PropertyScreenProps {
-  offers: TOffers;
-}
-
-function PropertyScreen(props: PropertyScreenProps): JSX.Element {
-  const { offers } = props;
+function PropertyScreen(): JSX.Element {
   const params = useParams();
-  const [activeId, setActiveId] = useState<TOffer['id'] | undefined>(undefined);
+  const dispatch = useDispatch();
+  const activeId = useSelector(activeOfferIdSelector);
 
-  const offer = offers.find((ofr) => ofr.id.toString() === params.id);
-  const neighbourOffers = offer ? offers.filter((ofr) => ofr.id!==offer.id) : [];
+  useEffect(() => {
+    if (params.id) {
+      dispatch(fetchDetails(params.id));
+      dispatch(fetchNeighbours(params.id));
+      dispatch(fetchComments(params.id));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    return () => {
+      dispatch(setActiveOffer(undefined));
+      dispatch(setNeighbourOffers([]));
+      dispatch(setComments([]));
+    };
+  }, [dispatch, params.id]);
+
+  const {
+    activeOffer: offer,
+    neighbourOffers,
+    comments,
+    detailsRequested,
+    detailsFailed,
+    detailsSucceed,
+  } = useSelector((store) => store[NameSpace.Data]);
+
+  const authorizationStatus = useSelector(authStatusSelector);
+
+  if (detailsFailed) {
+    return <NotFoundScreen />;
+  }
 
   return (
     <div className="page">
-      <Header authorized />
+      <Header />
 
       <main className="page__main page__main--property">
-        {offer && (
+        {detailsRequested && <Spinner />}
+        {detailsSucceed && offer && (
           <section className="property">
             <div className="property__gallery-container container">
               <div className="property__gallery">
@@ -148,28 +185,40 @@ function PropertyScreen(props: PropertyScreenProps): JSX.Element {
                 </div>
                 <section className="property__reviews reviews">
                   <h2 className="reviews__title">
-                    Reviews &middot; <span className="reviews__amount">{reviews.length}</span>
+                    Reviews &middot;{' '}
+                    <span className="reviews__amount">{comments.length}</span>
                   </h2>
-                  <ReviewList reviews={reviews} />
-                  <ReviewForm />
+                  <ReviewList reviews={comments} />
+                  {authorizationStatus === AuthorizationStatus.Auth && (
+                    <ReviewForm />
+                  )}
                 </section>
               </div>
             </div>
             <section className="property__map map">
-              <Map city={offer.city} offers={neighbourOffers} activePointId={activeId}/>
+              <Map
+                city={offer.city}
+                offers={neighbourOffers}
+                activePointId={activeId}
+              />
             </section>
           </section>
         )}
-        <div className="container">
-          <section className="near-places places">
-            <h2 className="near-places__title">
-              Other places in the neighbourhood
-            </h2>
-            <div className="near-places__list places__list">
-              <OfferList offers={neighbourOffers} onOfferHover={setActiveId} type='near-places' />
-            </div>
-          </section>
-        </div>
+        {neighbourOffers.length && (
+          <div className="container">
+            <section className="near-places places">
+              <h2 className="near-places__title">
+                Other places in the neighbourhood
+              </h2>
+              <div className="near-places__list places__list">
+                <OfferList
+                  offers={neighbourOffers}
+                  type="near-places"
+                />
+              </div>
+            </section>
+          </div>
+        )}
       </main>
     </div>
   );

@@ -2,10 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './components/app/app';
-import { offers } from './mocks/offers';
 import { store } from './store';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { checkAuthorization } from './store/api-actions';
+
+store.dispatch(checkAuthorization());
 
 ReactDOM.render(
   <React.StrictMode>
@@ -21,7 +23,7 @@ ReactDOM.render(
         draggable
         pauseOnHover
       />
-      <App offers={offers} />
+      <App />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),

@@ -1,5 +1,12 @@
 import { TServerOffer, TOffer } from './../types/offers';
 
+// const propTypes = {
+//   room: 'Private room',
+//   house: 'Whole house',
+//   apartment: 'Apartment',
+//   hotel: 'Hotel',
+// };
+
 export const adaptOffer = (offer: TServerOffer): TOffer  => ({
   id: offer.id,
   title: offer.title,

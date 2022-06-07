@@ -2,28 +2,23 @@ import type { TOffer } from '../../types/offers';
 import { Link } from 'react-router-dom';
 import cx from 'classnames';
 import { TCardType } from '../../types';
+import { useDispatch } from '../../hooks';
+import { changeActiveOfferId } from '../../store/app/app';
+import { useCallback } from 'react';
+import { PropertyType } from '../../utils/const';
 
 interface CardProps {
   offer: TOffer;
-  onActiveCardChange?: (id: TOffer['id'] | undefined)=>void;
   type: TCardType;
 }
 
 function Card(props: CardProps) {
-  const { offer, onActiveCardChange, type } = props;
+  const { offer, type } = props;
+  const dispatch = useDispatch();
 
-  const setActiveCard = (card: TOffer | undefined) => {
-    if (onActiveCardChange === undefined) {
-      return;
-    }
-
-    if (card === undefined) {
-      onActiveCardChange(card);
-      return;
-    }
-
-    onActiveCardChange(card.id);
-  };
+  const setActiveCard = useCallback((card: TOffer['id'] | undefined) => {
+    dispatch(changeActiveOfferId(card));
+  }, [dispatch]);
 
   return (
     <article
@@ -35,7 +30,7 @@ function Card(props: CardProps) {
         },
         'place-card',
       )}
-      onMouseEnter={setActiveCard.bind(null, offer)}
+      onMouseEnter={setActiveCard.bind(null, offer.id)}
       onMouseLeave={setActiveCard.bind(null, undefined)}
     >
       {offer.isPremium && (
@@ -83,7 +78,7 @@ function Card(props: CardProps) {
         <h2 className="place-card__name">
           <Link to={`/offer/${offer.id}`}>{offer.title}</Link>
         </h2>
-        <p className="place-card__type">{offer.type}</p>
+        <p className="place-card__type">{PropertyType[offer.type as unknown as keyof typeof PropertyType]}</p>
       </div>
     </article>
   );

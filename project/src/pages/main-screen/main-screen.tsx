@@ -1,12 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect } from 'react';
 import cx from 'classnames';
 import { useDispatch, useSelector } from '../../hooks';
 
-import type { TOffer } from '../../types/offers';
-
-import { filterOffers, sortOffers } from '../../utils';
-import { cities, SortType } from '../../utils/const';
-import { changeCity } from '../../store/action';
+import { cities, NameSpace } from '../../utils/const';
+import { changeCity } from '../../store/app/app';
 
 import OfferList from '../../components/offer-list/offer-list';
 import Header from '../../components/header/header';
@@ -16,33 +13,41 @@ import Sorting from '../../components/sorting/sorting';
 import Spinner from '../../components/spinner/spinner';
 import { fetchOffers } from '../../store/api-actions';
 import NoOffers from '../../components/no-offers/no-offers';
+import LoadingError from '../../components/loading-error/loading-error';
+import { sortedOffersSelector } from '../../store/data/selectors';
+import { citySelector, activeOfferIdSelector } from '../../store/app/selectors';
+import { setOffers } from '../../store/data/data';
 
 function MainScreen(): JSX.Element {
-  const { offers, city, isDataLoaded } = useSelector((state) => state);
-  const dispatch = useDispatch();
-
-  const [activeOfferId, setActiveOfferId] = useState<TOffer['id'] | undefined>(
-    undefined,
+  const { dataRequested, dataSucceed, dataFailed } = useSelector(
+    (state) => state[NameSpace.Data],
   );
-  const [sorting, setSorting] = useState<SortType>(SortType.Popular);
+  const city = useSelector(citySelector);
+  const activeOfferId = useSelector(activeOfferIdSelector);
 
-  const offerHoverHandler = (id: TOffer['id'] | undefined) => {
-    setActiveOfferId(id);
-  };
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(changeCity(cities[0]));
     dispatch(fetchOffers());
+
+    return () => {
+      dispatch(setOffers([]));
+    };
   }, [dispatch]);
 
-  const cityOffers = useMemo(() => filterOffers(city, offers), [city, offers]);
+  const cityOffers = useSelector(sortedOffersSelector);
 
   const renderContent = () => {
-    if (!isDataLoaded) {
+    if (dataRequested) {
       return <Spinner />;
     }
 
-    if (cityOffers.length === 0) {
+    if (dataFailed) {
+      return <LoadingError />;
+    }
+
+    if (dataSucceed && cityOffers.length === 0) {
       return <NoOffers />;
     }
 
@@ -51,16 +56,12 @@ function MainScreen(): JSX.Element {
         <section className="cities__places places">
           <h2 className="visually-hidden">Places</h2>
           <b className="places__found">
-            {cityOffers.length} place{cityOffers.length > 1 && 's'} to
-          stay in {city.title}
+            {cityOffers.length} place{cityOffers.length > 1 && 's'} to stay in{' '}
+            {city.title}
           </b>
-          <Sorting current={sorting} onOffersSort={setSorting} />
+          <Sorting />
           <div className="cities__places-list places__list tabs__content">
-            <OfferList
-              offers={sortOffers(cityOffers, sorting)}
-              onOfferHover={offerHoverHandler}
-              type="cities"
-            />
+            <OfferList offers={cityOffers} type="cities" />
           </div>
         </section>
         <div className="cities__right-section">
@@ -78,7 +79,7 @@ function MainScreen(): JSX.Element {
 
   return (
     <div className="page page--gray page--main">
-      <Header authorized />
+      <Header />
 
       <main
         className={cx('page__main page__main--index', {
@@ -89,12 +90,10 @@ function MainScreen(): JSX.Element {
         <div className="tabs">
           <CityList items={cities} />
         </div>
-        <div className="cities">
-          {renderContent()}
-        </div>
+        <div className="cities">{renderContent()}</div>
       </main>
     </div>
   );
 }
 
-export default MainScreen;
+export default React.memo(MainScreen);

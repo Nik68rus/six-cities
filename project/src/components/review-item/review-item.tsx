@@ -1,12 +1,15 @@
-import { TReview } from '../../types';
+import { TComment } from '../../types';
+import { getDate } from '../../utils';
 
 interface ReviewItemProps {
-  review: TReview;
+  review: TComment;
 }
 
 function ReviewItem(props: ReviewItemProps): JSX.Element {
   const {review} = props;
   const {comment, date, rating, user} = review;
+
+  const [dateText, dateDate] = getDate(date);
 
   return (
     <li className="reviews__item">
@@ -14,7 +17,7 @@ function ReviewItem(props: ReviewItemProps): JSX.Element {
         <div className="reviews__avatar-wrapper user__avatar-wrapper user__avatar-wrapper--pro">
           <img
             className="reviews__avatar user__avatar"
-            src={user.avatar}
+            src={user.avatarUrl}
             width="54"
             height="54"
             alt="Reviews avatar"
@@ -30,8 +33,8 @@ function ReviewItem(props: ReviewItemProps): JSX.Element {
           </div>
         </div>
         <p className="reviews__text">{comment}</p>
-        <time className="reviews__time" dateTime="2019-04-24">
-          {date.toLocaleDateString()}
+        <time className="reviews__time" dateTime={dateText}>
+          {dateDate}
         </time>
       </div>
     </li>

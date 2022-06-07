@@ -27,3 +27,10 @@ export const sortOffers = (offers: readonly TOffer[] | [], sortType: SortType) =
     return [];
   }
 };
+
+export const getDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const dateTime = date.toISOString().split('T')[0];
+  const dateText = date.toLocaleDateString('en-US', {month: 'long', year: 'numeric'});
+  return [dateTime, dateText];
+};

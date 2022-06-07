@@ -3,11 +3,14 @@ import { TCity } from '../types';
 export enum AuthorizationStatus {
   Auth = 'Auth',
   NotAuth = 'NotAuth',
+  Unknown = 'Unknown',
 }
 
 export enum PropertyType {
-  Apartment = 'Apartment',
-  Room = 'Private room'
+  apartment = 'Apartment',
+  room = 'Private room',
+  house = 'Whole house',
+  hotel = 'Hotel'
 }
 
 export enum Pins {
@@ -60,3 +63,9 @@ export const cities: TCity[] = [
     zoom: 12,
   },
 ];
+
+export enum NameSpace {
+  App = 'APP',
+  Data = 'DATA',
+  User = 'USER',
+}

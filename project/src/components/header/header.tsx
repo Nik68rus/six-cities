@@ -1,13 +1,20 @@
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useSelector } from '../../hooks';
+import { authStatusSelector, userSelector } from '../../store/user/selectors';
+import { AuthorizationStatus } from '../../utils/const';
 import { Paths } from '../../utils/paths';
 
-interface HeaderProps {
-  authorized: boolean;
-}
+import './header.css';
 
-function Header(props: HeaderProps): JSX.Element {
-  const { authorized } = props;
+function Header(): JSX.Element {
+  const user = useSelector(userSelector);
+  const auth = useSelector(authStatusSelector);
+
   const location = useLocation();
+
+  console.log('header render');
+
 
   return (
     <header className="header">
@@ -26,16 +33,18 @@ function Header(props: HeaderProps): JSX.Element {
           </div>
           {location.pathname !== Paths.Login && (
             <nav className="header__nav">
-              {authorized && (
+              {auth === AuthorizationStatus.Auth && (
                 <ul className="header__nav-list">
                   <li className="header__nav-item user">
                     <Link
-                      to="/"
+                      to={Paths.Main}
                       className="header__nav-link header__nav-link--profile"
                     >
-                      <div className="header__avatar-wrapper user__avatar-wrapper"></div>
+                      <div className="header__avatar-wrapper user__avatar-wrapper">
+                        <img src={user?.avatarUrl} alt="User avatar" />
+                      </div>
                       <span className="header__user-name user__name">
-                        Oliver.conner@gmail.com
+                        {user?.email}
                       </span>
                     </Link>
                   </li>
@@ -46,16 +55,16 @@ function Header(props: HeaderProps): JSX.Element {
                   </li>
                 </ul>
               )}
-              {!authorized && (
+              {(auth === AuthorizationStatus.NotAuth || auth === AuthorizationStatus.Unknown) && (
                 <ul className="header__nav-list">
                   <li className="header__nav-item user">
-                    <a
+                    <Link
+                      to={Paths.Login}
                       className="header__nav-link header__nav-link--profile"
-                      href="#todo"
                     >
                       <div className="header__avatar-wrapper user__avatar-wrapper"></div>
                       <span className="header__login">Sign in</span>
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               )}
@@ -67,4 +76,4 @@ function Header(props: HeaderProps): JSX.Element {
   );
 }
 
-export default Header;
+export default React.memo(Header);

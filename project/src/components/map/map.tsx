@@ -1,4 +1,4 @@
-import {useRef, useEffect} from 'react';
+import React, {useRef, useEffect} from 'react';
 import {Icon, Marker} from 'leaflet';
 import useMap from '../../hooks/useMap';
 import { TCity } from '../../types';
@@ -49,4 +49,4 @@ function Map(props: MapProps): JSX.Element {
   );
 }
 
-export default Map;
+export default React.memo(Map);

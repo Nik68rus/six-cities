@@ -1,4 +1,5 @@
-import { TOffer } from './offers';
+import { Token } from '../services/token';
+
 export type TCityName = 'Paris' | 'Cologne' | 'Brussels' | 'Amsterdam' | 'Hamburg' | 'Dusseldorf';
 export type TCardType = 'cities' | 'favorites' | 'near-places';
 
@@ -14,20 +15,6 @@ export type TCity = {
   lng: number;
   zoom: number;
   title: TCityName;
-}
-
-export type TReview = {
-  comment: string;
-  date: Date;
-  id: number;
-  rating: number;
-  user: TUser;
-}
-
-export type TState = {
-  city: TCity;
-  offers: ReadonlyArray<TOffer> | [];
-  isDataLoaded: boolean;
 }
 
 export type TLocation = {
@@ -47,3 +34,28 @@ export type TServerUser = {
   isPro: boolean;
   avatarUrl: string;
 }
+
+export type TAuthData = {
+  email: string;
+  password: string;
+}
+
+export type TAuthInfo = TServerUser & {
+  email: string;
+  token: Token;
+}
+
+export type TUserData = TServerUser & {email: string};
+
+export type TCommentPost = {
+  comment: string;
+  rating: number;
+}
+
+export type TComment = TCommentPost & {
+  date: string;
+  id: number;
+  user: TServerUser;
+}
+
+

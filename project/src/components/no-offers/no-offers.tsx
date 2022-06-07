@@ -1,7 +1,9 @@
+import React from 'react';
 import { useSelector } from '../../hooks';
+import { citySelector } from '../../store/app/selectors';
 
 function NoOffers (): JSX.Element {
-  const {city} = useSelector((store) => store);
+  const city = useSelector(citySelector);
 
   return (
     <div className="cities__places-container cities__places-container--empty container">
@@ -19,4 +21,4 @@ function NoOffers (): JSX.Element {
   );
 }
 
-export default NoOffers;
+export default React.memo(NoOffers);

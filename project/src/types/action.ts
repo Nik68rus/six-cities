@@ -3,7 +3,20 @@
 
 export enum ActionType {
   ChangeCity = 'city/change',
-  LoadOffers = 'data/loadOffers'
+  RequestOffers = 'data/requestOffers',
+  SetOffers = 'data/setOffers',
+  SetError = 'data/setError',
+  CheckAuth = 'user/checkAuth',
+  SetAuthStatus = 'user/setAuth',
+  SignIn = 'user/signIn',
+  SetUser = 'user/setData',
+  RequestDetails = 'data/requestDetails',
+  SetActiveOffer = 'data/setActiveOffer',
+  RequestNeighbours = 'data/requestNeighbours',
+  SetNeighbours = 'data/setNeighbours',
+  RequestComments = 'data/requestComments',
+  SetComments = 'data/setComments',
+  PostComment = 'data/postComment',
 }
 
 // export type TChangeCityAction = {

@@ -1,16 +1,28 @@
-import { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useDispatch } from '../../hooks';
+import { postComment } from '../../store/api-actions';
+import { TCommentPost } from '../../types';
 
 function ReviewForm(): JSX.Element {
-  const [review, setReview] = useState({rating: 0, review: ''});
+  const [review, setReview] = useState<TCommentPost>({rating: 0, comment: ''});
+  const dispatch = useDispatch();
+  const params = useParams();
 
   const formChangeHandler = (evt: ChangeEvent<HTMLFormElement>) => {
-    console.log(evt);
     const {name, value} = evt.target;
     setReview({...review, [name]: value});
   };
 
+  const formSubmitHandler = (evt: FormEvent) => {
+    evt.preventDefault();
+    if (typeof params.id === 'string') {
+      dispatch(postComment({comment: review, offerId: params.id}));
+    }
+  };
+
   return (
-    <form className="reviews__form form" action="#" method="post" onChange={formChangeHandler}>
+    <form className="reviews__form form" action="#" method="post" onChange={formChangeHandler} onSubmit={formSubmitHandler}>
       <label className="reviews__label form__label" htmlFor="review">
         Your review
       </label>
@@ -103,7 +115,7 @@ function ReviewForm(): JSX.Element {
       <textarea
         className="reviews__textarea form__textarea"
         id="review"
-        name="review"
+        name="comment"
         placeholder="Tell how was your stay, what you like and what can be improved"
       >
       </textarea>
@@ -116,7 +128,7 @@ function ReviewForm(): JSX.Element {
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled
+          disabled={!(review.rating > 0 && review.comment.trim().length > 3)}
         >
           Submit
         </button>
@@ -125,4 +137,4 @@ function ReviewForm(): JSX.Element {
   );
 }
 
-export default ReviewForm;
+export default React.memo(ReviewForm);

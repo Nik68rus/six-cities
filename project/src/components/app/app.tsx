@@ -1,6 +1,4 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { TOffers } from '../../types/offers';
-import { AuthorizationStatus } from '../../utils/const';
 import { Paths } from '../../utils/paths';
 import FavoritesScreen from '../../pages/favorites-screen/favorites-screen';
 import LoginScreen from '../../pages/login-screen/login-screen';
@@ -9,11 +7,7 @@ import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 import PrivateRoute from '../private-route/private-route';
 import PropertyScreen from '../../pages/property-screen/property-screen';
 
-interface AppProps {
-  offers: TOffers;
-}
-
-function App({ offers }: AppProps): JSX.Element {
+function App(): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
@@ -22,12 +16,12 @@ function App({ offers }: AppProps): JSX.Element {
         <Route
           path={Paths.Favorites}
           element={
-            <PrivateRoute authorizationStatus={AuthorizationStatus.Auth}>
-              <FavoritesScreen list={offers} />
+            <PrivateRoute>
+              <FavoritesScreen />
             </PrivateRoute>
           }
         />
-        <Route path={Paths.Room} element={<PropertyScreen offers={offers} />} />
+        <Route path={Paths.Room} element={<PropertyScreen />} />
         <Route path="*" element={<NotFoundScreen />} />
       </Routes>
     </BrowserRouter>
