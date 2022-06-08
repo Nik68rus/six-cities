@@ -19,6 +19,7 @@ export type TDataState = {
 export type TUserState = {
   authorizationStatus: AuthorizationStatus;
   user: TUserData | undefined;
+  favoriteOffers: TOffer[] | [];
 }
 
 export type TAppState = {

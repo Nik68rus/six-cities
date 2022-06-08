@@ -6,6 +6,7 @@ import { useDispatch } from '../../hooks';
 import { changeActiveOfferId } from '../../store/app/app';
 import { useCallback } from 'react';
 import { PropertyType } from '../../utils/const';
+import { addToFavorite } from '../../store/api-actions';
 
 interface CardProps {
   offer: TOffer;
@@ -19,6 +20,10 @@ function Card(props: CardProps) {
   const setActiveCard = useCallback((card: TOffer['id'] | undefined) => {
     dispatch(changeActiveOfferId(card));
   }, [dispatch]);
+
+  const favoriteToggleHandler = () => {
+    dispatch(addToFavorite({id: offer.id, status: offer.isFavorite ? 0 : 1}));
+  };
 
   return (
     <article
@@ -60,6 +65,7 @@ function Card(props: CardProps) {
               'place-card__bookmark-button--active': offer.isFavorite,
             })}
             type="button"
+            onClick={favoriteToggleHandler}
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>

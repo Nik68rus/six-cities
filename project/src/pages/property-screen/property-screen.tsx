@@ -8,6 +8,7 @@ import Map from '../../components/map/map';
 import OfferList from '../../components/offer-list/offer-list';
 import { useDispatch, useSelector } from '../../hooks';
 import {
+  addToFavorite,
   fetchComments,
   fetchDetails,
   fetchNeighbours
@@ -53,6 +54,12 @@ function PropertyScreen(): JSX.Element {
 
   const authorizationStatus = useSelector(authStatusSelector);
 
+  const toggleFavoriteHandler = () => {
+    if (offer && params.id) {
+      dispatch(addToFavorite({id: offer.id, status: offer.isFavorite ? 0 : 1}));
+    }
+  };
+
   if (detailsFailed) {
     return <NotFoundScreen />;
   }
@@ -95,6 +102,7 @@ function PropertyScreen(): JSX.Element {
                       'property__bookmark-button--active': offer.isFavorite,
                     })}
                     type="button"
+                    onClick={toggleFavoriteHandler}
                   >
                     <svg
                       className="property__bookmark-icon"

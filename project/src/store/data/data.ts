@@ -33,6 +33,15 @@ export const appData = createSlice({
       state.dataFailed = false;
       state.dataSucceed = true;
     },
+    updateOffer: (state, action: PayloadAction<TOffer>) => {
+      if (state.activeOffer?.id === action.payload.id) {
+        state.activeOffer = action.payload;
+      } else if (state.activeOffer) {
+        state.neighbourOffers = state.neighbourOffers.map((ofr) => ofr.id === action.payload.id ? action.payload : ofr);
+      } else {
+        state.offers = state.offers.map((ofr) => ofr.id === action.payload.id ? action.payload : ofr);
+      }
+    },
     setError: (state) => {
       state.dataRequested = false;
       state.dataFailed = true;
@@ -63,5 +72,5 @@ export const appData = createSlice({
   },
 });
 
-export const {requestOffers, setOffers, setError, requestDetails, setActiveOffer, setWrongId, setNeighbourOffers, setComments} = appData.actions;
+export const {requestOffers, setOffers, updateOffer, setError, requestDetails, setActiveOffer, setWrongId, setNeighbourOffers, setComments} = appData.actions;
 export default appData.reducer;

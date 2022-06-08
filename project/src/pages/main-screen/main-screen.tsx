@@ -3,7 +3,6 @@ import cx from 'classnames';
 import { useDispatch, useSelector } from '../../hooks';
 
 import { cities, NameSpace } from '../../utils/const';
-import { changeCity } from '../../store/app/app';
 
 import OfferList from '../../components/offer-list/offer-list';
 import Header from '../../components/header/header';
@@ -14,7 +13,7 @@ import Spinner from '../../components/spinner/spinner';
 import { fetchOffers } from '../../store/api-actions';
 import NoOffers from '../../components/no-offers/no-offers';
 import LoadingError from '../../components/loading-error/loading-error';
-import { sortedOffersSelector } from '../../store/data/selectors';
+import { allOffersSelector, sortedOffersSelector } from '../../store/data/selectors';
 import { citySelector, activeOfferIdSelector } from '../../store/app/selectors';
 import { setOffers } from '../../store/data/data';
 
@@ -28,7 +27,6 @@ function MainScreen(): JSX.Element {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(changeCity(cities[0]));
     dispatch(fetchOffers());
 
     return () => {
@@ -36,6 +34,7 @@ function MainScreen(): JSX.Element {
     };
   }, [dispatch]);
 
+  const offers = useSelector(allOffersSelector);
   const cityOffers = useSelector(sortedOffersSelector);
 
   const renderContent = () => {
@@ -68,7 +67,7 @@ function MainScreen(): JSX.Element {
           <section className="cities__map map">
             <Map
               city={city}
-              offers={cityOffers}
+              offers={offers}
               activePointId={activeOfferId}
             />
           </section>
